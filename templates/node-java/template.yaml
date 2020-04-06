@@ -11,6 +11,9 @@ parameters:
   - name: repo
     displayName: GitHub Repo
     type: string
+  - name: repoOwner
+    displayName: GitHub Repo Owner
+    type: string  
   - name: nexusCredentialId
     displayName: Nexus Credential ID
     type: CREDENTIALS
@@ -20,6 +23,6 @@ parameters:
 multibranch:
   branchSource:
     github:
-      repoOwner: buzz-microservices
+      repoOwner: ${repoOwner}
       repository: ${repo}
       credentialsId: ${githubCredentialId}

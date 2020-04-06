@@ -63,7 +63,7 @@ pipeline {
                 withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
             	sh """#!/busybox/sh
             	executor \
-                -c git://github.com/${repo}/${applicationName}.git \
+                -c git://github.com/${repoOwner}/${repo}.git \
                 -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
                 -d gcr.io/na-csa-msuarez/${applicationName}:1.0.0-${commitHash} \
                 -d gcr.io/na-csa-msuarez/${applicationName}:latest
