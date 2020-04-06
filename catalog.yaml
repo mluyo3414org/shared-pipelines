@@ -1,0 +1,4 @@
+name: shared-pipelines-catalog
+displayName: Shared pipelines catalog
+version: 1
+type: pipeline-template-catalog

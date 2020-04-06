@@ -1,0 +1,26 @@
+version: 1
+type: pipeline-template
+
+name: Java/Node multibranch pipeline
+templateType: MULTIBRANCH
+description: Test, Build and Deploy for Java/Node applications
+parameters:
+  - name: githubCredentialId
+    displayName: GitHub Credential ID
+    type: CREDENTIALS
+  - name: repo
+    displayName: GitHub Repo
+    type: string
+  - name: nexusCredentialId
+    displayName: Nexus Credential ID
+    type: CREDENTIALS
+  - name: applicationName
+    displayName: Application Name
+    type: string
+multibranch:
+  branchSource:
+    github:
+      repoOwner: buzz-microservices
+      repository: ${repo}
+      credentialsId: ${githubCredentialId}
+      markerFile: JenkinsFile.params

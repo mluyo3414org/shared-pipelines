@@ -1,0 +1,77 @@
+// Loading Shared Libraries
+library identifier: 'shared-library@master', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: 'https://github.com/mluyo3414org/shared-pipelines.git'])
+
+def nodePodYaml = libraryResource 'resources/agent/k8s/node-pod.yaml'
+def kanikoPodYaml = libraryResource 'resources/agent/k8s/kaniko-pod.yaml'
+
+pipeline {
+  agent none
+  options { 
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+    skipDefaultCheckout true
+  }
+  stages {
+    stage('Acquiring pod') {
+	 agent {
+            kubernetes {
+                label 'node'
+                yaml nodePodYaml
+                }
+            }	
+            stages{
+                stage('Install'){
+                    steps {
+                        container('node') {
+                        checkout scm
+                        sh 'npm install'
+                   }
+
+              }
+                    }
+                
+            
+            stage('Test'){
+                    steps {
+                        container('node') {
+                        sh 'CI=true npm test'
+                    }
+                script{
+                   commitHash = sh(returnStdout: true, script: "git rev-parse HEAD | cut -c1-7 | tr -d '\n'")
+                 }
+            }
+            post {
+                always {
+                   echo "done"     
+                }
+                }
+            }
+
+	    }
+        }
+        stage('Build Docker Image') {
+         agent {
+            kubernetes {
+                label 'kaniko'
+                yaml kanikoPodYaml
+                }
+            }
+            steps {
+              container(name: 'kaniko', shell: '/busybox/sh') {
+                withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+            	sh """#!/busybox/sh
+            	executor \
+                -c git://github.com/${repo}/${applicationName}.git \
+                -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
+                -d gcr.io/na-csa-msuarez/${applicationName}:${version}-${commitHash} \
+                -d gcr.io/na-csa-msuarez/${applicationName}:latest
+                """
+                   }
+              }
+            }
+        }
+            
+        
+    }
+}
