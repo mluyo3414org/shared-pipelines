@@ -23,4 +23,3 @@ multibranch:
       repoOwner: buzz-microservices
       repository: ${repo}
       credentialsId: ${githubCredentialId}
-      markerFile: JenkinsFile.params
