@@ -57,6 +57,7 @@ pipeline {
                 yaml kanikoPodYaml
                 }
             }
+            //version needs to be replaced
             steps {
               container(name: 'kaniko', shell: '/busybox/sh') {
                 withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
@@ -64,7 +65,7 @@ pipeline {
             	executor \
                 -c git://github.com/${repo}/${applicationName}.git \
                 -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
-                -d gcr.io/na-csa-msuarez/${applicationName}:${version}-${commitHash} \
+                -d gcr.io/na-csa-msuarez/${applicationName}:1.0.0-${commitHash} \
                 -d gcr.io/na-csa-msuarez/${applicationName}:latest
                 """
                    }
