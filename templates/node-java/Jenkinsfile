@@ -8,6 +8,7 @@ def nodePodYaml = libraryResource 'agents/k8s/node-pod.yaml'
 def kanikoPodYaml = libraryResource 'agents/k8s/kaniko-pod.yaml'
 def mavenPodYaml = libraryResource 'agents/k8s/maven-pod.yaml'
 def settingsXml = libraryResource """mvnSettings/${applicationName}/settings.xml"""
+def build = ''
 
 pipeline {
   agent none
@@ -32,7 +33,7 @@ pipeline {
             // def buildParameters = readYaml(file: 'build.yaml')
             // }
             script{
-            def build = readFile(file: '.build')
+            build = readFile(file: '.build')
             }
             defineProps("""${build}""")
             container('node') {
