@@ -33,7 +33,7 @@ pipeline {
             // }
             script{
             def build = readFile(file: '.build')
-            defineProps(build)
+            defineProps("""${build}""")
             }
             container('node') {
               sh 'npm install'
