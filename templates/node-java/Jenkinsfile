@@ -27,9 +27,14 @@ pipeline {
         stage('Install') {
           steps {
             checkout scm
+            //defineProps('.nodejs-app', [npmPackages: 'express pug'])            
+            // script{
+            // def buildParameters = readYaml(file: 'build.yaml')
+            // }
             script{
-            def buildParameters = readYaml(file: 'build.yaml')
+            def build = readFile(file: '.build')
             }
+            defineProps(build)
             container('node') {
               sh 'npm install'
             }
@@ -71,7 +76,7 @@ pipeline {
             	executor \
                 -c git://github.com/${repoOwner}/${repo}.git \
                 -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
-                -d gcr.io/na-csa-msuarez/${applicationName}:${buildParameters.version}-${commitHash} \
+                -d gcr.io/na-csa-msuarez/${applicationName}:${build.version}-${commitHash} \
                 -d gcr.io/na-csa-msuarez/${applicationName}:latest
                 """
           }

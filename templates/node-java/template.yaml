@@ -26,4 +26,4 @@ multibranch:
       repoOwner: ${repoOwner}
       repository: ${repo}
       credentialsId: ${githubCredentialId}
-      markerFile: build.yaml 
+      markerFile: .build 
