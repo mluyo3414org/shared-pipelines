@@ -8,7 +8,6 @@ def nodePodYaml = libraryResource 'agents/k8s/node-pod.yaml'
 def kanikoPodYaml = libraryResource 'agents/k8s/kaniko-pod.yaml'
 def mavenPodYaml = libraryResource 'agents/k8s/maven-pod.yaml'
 def settingsXml = libraryResource """mvnSettings/${applicationName}/settings.xml"""
-def build = ''
 
 pipeline {
   agent none
@@ -28,14 +27,7 @@ pipeline {
         stage('Install') {
           steps {
             checkout scm
-            //defineProps('.nodejs-app', [npmPackages: 'express pug'])            
-            // script{
-            // def buildParameters = readYaml(file: 'build.yaml')
-            // }
-            script{
-            build = readFile(file: '.build')
-            }
-            defineProps("""${build}""")
+            defineProps('build.yaml', [email: 'defaultadmin@email.com'])
             container('node') {
               sh 'npm install'
             }
