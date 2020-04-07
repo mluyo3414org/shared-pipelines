@@ -26,9 +26,9 @@ pipeline {
       stages {
         stage('Install') {
           steps {
+            checkout scm
+            defineProps('jenkinsFileParams', [email: 'test@test.com'])            
             container('node') {
-              defineProps('jenkinsFileParams', [email: 'test@test.com'])            
-              checkout scm
               sh 'npm install'
             }
 
@@ -85,8 +85,7 @@ pipeline {
       }
       
           steps {
-            container('maven') {
-              checkout changelog: false, 
+            checkout changelog: false, 
               poll: false, 
               scm: [$class: 'GitSCM', 
               branches: [[name: '*/master']], 
@@ -94,6 +93,7 @@ pipeline {
               submoduleCfg: [], 
               userRemoteConfigs: [[url: 'https://github.com/buzz-microservices/backend-location.git']]]
 
+            container('maven') {
               writeFile file: 'settings.xml', text:"""${settingsXml}"""
               sh 'mvn -s settings.xml dependency:list'
               //checkout scm
