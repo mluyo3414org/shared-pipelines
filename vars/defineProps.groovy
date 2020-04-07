@@ -7,8 +7,9 @@ def call(String file, Map defaults) {
   // body.resolveStrategy = Closure.DELEGATE_FIRST
   // body.delegate = pipelineParams
   // body()
-  def props = readYaml(file: 'build.yaml')
+  def props = readYaml file: file
   for ( e in props ) {
     env.setProperty(e.key, e.value)
   }
 }
+ 
