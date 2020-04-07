@@ -1,66 +1,71 @@
 // Loading Shared Libraries
 library identifier: 'shared-library@master', retriever: modernSCM(
   [$class: 'GitSCMSource',
-   remote: 'https://github.com/mluyo3414org/shared-pipelines.git'])
+    remote: 'https://github.com/mluyo3414org/shared-pipelines.git'
+  ])
 
 def nodePodYaml = libraryResource 'agents/k8s/node-pod.yaml'
 def kanikoPodYaml = libraryResource 'agents/k8s/kaniko-pod.yaml'
+def mavenPodYaml = libraryResource 'agents/k8s/maven-pod.yaml'
+def settingsXml = libraryResource ""
+"mvnSettings/${applicationName}/settings.xml"
+""
 
 pipeline {
   agent none
-  options { 
+  options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
     skipDefaultCheckout true
   }
   stages {
     stage('Acquiring pod') {
-	 agent {
-            kubernetes {
-                label 'node'
-                yaml nodePodYaml
-                }
-            }	
-            stages{
-                stage('Install'){
-                    steps {
-                        container('node') {
-                        checkout scm
-                        sh 'npm install'
-                   }
-
-              }
-                    }
-                
-            
-            stage('Test'){
-                    steps {
-                        container('node') {
-                        sh 'CI=true npm test'
-                    }
-                script{
-                   commitHash = sh(returnStdout: true, script: "git rev-parse HEAD | cut -c1-7 | tr -d '\n'")
-                 }
-            }
-            post {
-                always {
-                   echo "done"     
-                }
-                }
-            }
-
-	    }
+      agent {
+        kubernetes {
+          label 'node'
+          yaml nodePodYaml
         }
-        stage('Build Docker Image') {
-         agent {
-            kubernetes {
-                label 'kaniko'
-                yaml kanikoPodYaml
-                }
+      }
+      stages {
+        stage('Install') {
+          steps {
+            container('node') {
+              checkout scm
+              sh 'npm install'
             }
-            //version needs to be replaced
-            steps {
-              container(name: 'kaniko', shell: '/busybox/sh') {
-                withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+
+          }
+        }
+
+
+        stage('Test') {
+          steps {
+            container('node') {
+              sh 'CI=true npm test'
+            }
+            script {
+              commitHash = sh(returnStdout: true, script: "git rev-parse HEAD | cut -c1-7 | tr -d '\n'")
+            }
+          }
+          post {
+            always {
+              echo "done"
+            }
+          }
+        }
+
+      }
+    }
+    stage('Build Docker Image') {
+      agent {
+        kubernetes {
+          label 'kaniko'
+          yaml kanikoPodYaml
+        }
+      }
+      //version needs to be replaced
+      steps {
+        container(name: 'kaniko', shell: '/busybox/sh') {
+          withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
             	sh """#!/busybox/sh
             	executor \
                 -c git://github.com/${repoOwner}/${repo}.git \
@@ -68,11 +73,36 @@ pipeline {
                 -d gcr.io/na-csa-msuarez/${applicationName}:1.0.0-${commitHash} \
                 -d gcr.io/na-csa-msuarez/${applicationName}:latest
                 """
-                   }
-              }
-            }
+          }
         }
-            
-        
+      }
     }
-}
+    stage('Acquiring pod') {
+      agent {
+        kubernetes {
+          label 'maven'
+          yaml mavenPodYaml
+        }
+      }
+      stages {
+        stage('Maven build') {
+          steps {
+            container('maven') {
+              sh """ cat ${settingsXml} """
+              //checkout scm
+              //sh 'mvn -B -DskipTests clean package'
+              // stash includes: 'target/*.jar', name: 'location'
+              // stash includes: 'Dockerfile', name: 'Dockerfile'
+              // script{
+              //   version = sh(returnStdout: true, script: "mvn org.apache.maven.plugins:maven-help-plugin:3.1.0:evaluate \
+              //   -Dexpression=project.version -q -DforceStdout")
+              // }
+              // echo "App Version: ${version}"
+            }
+          }
+        }
+
+
+
+      }
+    }
