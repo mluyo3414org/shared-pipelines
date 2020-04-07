@@ -7,7 +7,7 @@ library identifier: 'shared-library@master', retriever: modernSCM(
 def nodePodYaml = libraryResource 'agents/k8s/node-pod.yaml'
 def kanikoPodYaml = libraryResource 'agents/k8s/kaniko-pod.yaml'
 def mavenPodYaml = libraryResource 'agents/k8s/maven-pod.yaml'
-def settingsXml = libraryResource """mvnSettings/${applicationName}/settings.xml"""
+def settingsXml = libraryResource 'mvnSettings/frontend-todo/settings.xml'
 
 pipeline {
   agent none
