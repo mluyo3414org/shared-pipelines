@@ -84,8 +84,7 @@ pipeline {
           yaml mavenPodYaml
         }
       }
-      stages {
-        stage('Maven build') {
+      
           steps {
             container('maven') {
               sh """ cat ${settingsXml} """
@@ -104,7 +103,7 @@ pipeline {
 
 
 
-      }
+      
   }
 }
 
