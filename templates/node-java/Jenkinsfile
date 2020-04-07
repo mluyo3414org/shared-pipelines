@@ -85,7 +85,8 @@ pipeline {
       
           steps {
             container('maven') {
-              sh """ cat ${settingsXml} """
+              writeFile file: 'settings.xml', text:"""${settingsXml}"""
+              sh "cat settings.xml"
               //checkout scm
               //sh 'mvn -B -DskipTests clean package'
               // stash includes: 'target/*.jar', name: 'location'
