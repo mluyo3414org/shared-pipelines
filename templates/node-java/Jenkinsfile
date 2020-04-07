@@ -27,7 +27,7 @@ pipeline {
         stage('Install') {
           steps {
             checkout scm
-            defineProps('jenkinsFileParams', [email: 'test@test.com'])            
+            def buildParameters = readYaml(file: 'build.yaml')
             container('node') {
               sh 'npm install'
             }
@@ -69,7 +69,7 @@ pipeline {
             	executor \
                 -c git://github.com/${repoOwner}/${repo}.git \
                 -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
-                -d gcr.io/na-csa-msuarez/${applicationName}:${version}-${commitHash} \
+                -d gcr.io/na-csa-msuarez/${applicationName}:${buildParameters.version}-${commitHash} \
                 -d gcr.io/na-csa-msuarez/${applicationName}:latest
                 """
           }
