@@ -7,7 +7,7 @@ library identifier: 'shared-library@master', retriever: modernSCM(
 def nodePodYaml = libraryResource 'agents/k8s/node-pod.yaml'
 def kanikoPodYaml = libraryResource 'agents/k8s/kaniko-pod.yaml'
 def mavenPodYaml = libraryResource 'agents/k8s/maven-pod.yaml'
-def settingsXml = libraryResource 'mvnSettings/frontend-todo/settings.xml'
+def settingsXml = libraryResource """mvnSettings/${applicationName}/settings.xml"""
 
 pipeline {
   agent none
@@ -85,8 +85,16 @@ pipeline {
       
           steps {
             container('maven') {
+              checkout changelog: false, 
+              poll: false, 
+              scm: [$class: 'GitSCM', 
+              branches: [[name: '*/master']], 
+              doGenerateSubmoduleConfigurations: false, extensions: [], 
+              submoduleCfg: [], 
+              userRemoteConfigs: [[url: 'https://github.com/buzz-microservices/backend-location.git']]]
+
               writeFile file: 'settings.xml', text:"""${settingsXml}"""
-              sh "cat settings.xml"
+              sh 'mvn -s settings.xml dependency:list'
               //checkout scm
               //sh 'mvn -B -DskipTests clean package'
               // stash includes: 'target/*.jar', name: 'location'
