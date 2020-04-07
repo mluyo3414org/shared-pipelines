@@ -77,7 +77,7 @@ pipeline {
         }
       }
     }
-    stage('Acquiring pod') {
+    stage('Acquiring maven pod') {
       agent {
         kubernetes {
           label 'maven'
