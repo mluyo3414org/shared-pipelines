@@ -5,29 +5,18 @@ Example for Shared Library + Pipeline Catalog - https://docs.cloudbees.com/docs/
 CloudBees Core Modern Platforms 2.204.3.7 (Managed Master and OC)
 Example Application for node: https://github.com/buzz-microservices/frontend-todo (needs to be update)
 
-Currentl structure:
-- Three pod templates (node, kaniko,maven) under resources/k8s/agents
-- Shared library - this repo (vars/defineProps.yaml) to read build.yaml from application repo https://github.com/buzz-microservices/frontend-todo/blob/master/build.yaml. 
-- Template Pipeline Catalog - this repo (templates/node-java) has one Jenkinsfile with its corresponding template.yaml with  parameters used in the Jenkinsfile.
+Current structure:
+- Shared Library defined pod templates (node, kaniko,maven) under resources/k8s/agents
+- Shared library method (vars/defineProps.yaml) to read build.yaml from application repo https://github.com/buzz-microservices/frontend-todo/blob/master/build.yaml. This provides runtime variables that can be defined in the  application repo.
+- Template Pipeline Catalog (templates/node-java) has one Jenkinsfile with its corresponding template.yaml with  parameters used in the Jenkinsfile.
 
+- GitHub Credential ID
+- GitHub Repo
+- GitHub Repo Owner
+- Nexus Credential ID
+- Application Name
 
-  - name: githubCredentialId
-    displayName: GitHub Credential ID
-    type: CREDENTIALS
-  - name: repo
-    displayName: GitHub Repo
-    type: string
-  - name: repoOwner
-    displayName: GitHub Repo Owner
-    type: string  
-  - name: nexusCredentialId
-    displayName: Nexus Credential ID
-    type: CREDENTIALS
-  - name: applicationName
-    displayName: Application Name
-    type: string
-
-Process to setup catalog:
+Process followed to setup catalog:
 
 1- Create a Managed Master
 
