@@ -8,6 +8,7 @@ Example Application for node: https://github.com/buzz-microservices/frontend-tod
 Current structure:
 - Shared Library with pod templates (node, kaniko,maven) under resources/k8s/agents
 - Shared library method (vars/defineProps.yaml) to read build.yaml from application repo https://github.com/buzz-microservices/frontend-todo/blob/master/build.yaml. This provides runtime variables that can be defined in the  application repo.
+- Currently storing settings.xml as code here. Another option is to have a configmap mounted to pod.
 - Pipeline Template Catalog (templates/node-java) has one Jenkinsfile with its corresponding template.yaml with  parameters used in the Jenkinsfile. It also contains marker file: build.yaml which will look through all branches of repo  and create  a job for  them  as part of  the multibranch job.
 Current parameters for pipeline template Catalog: GitHub Credential ID,  GitHub Repo, GitHub Repo Owner, Nexus Credential ID  (not currently used), Application Name
 
