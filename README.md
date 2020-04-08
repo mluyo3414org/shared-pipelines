@@ -1,5 +1,5 @@
 # shared-pipelines
-Work in progress:
+---   Work in progress ---
 
 Example for Shared Library + Pipeline Catalog - https://docs.cloudbees.com/docs/admin-resources/latest/pipeline-templates-user-guide/
 CloudBees Core Modern Platforms 2.204.3.7 (Managed Master and OC)
