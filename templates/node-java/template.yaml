@@ -20,6 +20,9 @@ parameters:
   - name: applicationName
     displayName: Application Name
     type: string
+  - name: mvnSettingsFile
+    displayName: File to be used for Maven
+    type: string
 multibranch:
   branchSource:
     github:

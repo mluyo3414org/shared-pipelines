@@ -1,21 +1,460 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+
+
+<!--
+
+Licensed to the Apache Software Foundation (ASF) under one
+
+or more contributor license agreements.  See the NOTICE file
+
+distributed with this work for additional information
+
+regarding copyright ownership.  The ASF licenses this file
+
+to you under the Apache License, Version 2.0 (the
+
+"License"); you may not use this file except in compliance
+
+with the License.  You may obtain a copy of the License at
+
+ 
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ 
+
+Unless required by applicable law or agreed to in writing,
+
+software distributed under the License is distributed on an
+
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+
+KIND, either express or implied.  See the License for the
+
+specific language governing permissions and limitations
+
+under the License.
+
+-->
+
+
+
+
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd">
+
+  <!-- localRepository
+
+   | The path to the local repository maven will use to store artifacts.
+
+   |
+
+   | Default: ${user.home}/.m2/repository
+
+  <localRepository>/path/to/local/repo</localRepository>
+
+  -->
+
+  <localRepository>/tmp/adms-repo</localRepository>
+
+
+
+
+
+  <!-- pluginGroups
+
+   | This is a list of additional group identifiers that will be searched when resolving plugins by their prefix, i.e.
+
+   | when invoking a command line like "mvn prefix:goal". Maven will automatically add the group identifiers
+
+   | "org.apache.maven.plugins" and "org.codehaus.mojo" if these are not already contained in the list.
+
+   |-->
+
+  <pluginGroups>
+
+    <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+
+  </pluginGroups>
+
+
+
+  <!-- proxies
+
+   | This is a list of proxies which can be used on this machine to connect to the network.
+
+   | Unless otherwise specified (by system property or command-line switch), the first proxy
+
+   | specification in this list marked as active will be used.
+
+   |-->
+
+  <proxies>
+
+
+
+  </proxies>
+
+
+
+  <!-- servers
+
+   | This is a list of authentication profiles, keyed by the server-id used within the system.
+
+   | Authentication profiles can be used whenever maven must make a connection to a remote server.
+
+   |-->
+
+  <servers>
+
+    <!-- nexus-user -->
+
+    <server>
+
+      <id>duke-adms-maven-repositories</id>
+
+      <username>$nexusUser</username>
+
+      <password>$nexusUserPw</password>
+
+    </server>
+
+    <!-- nexus-user  -->
+
+    <server>
+
+      <id>duke-adms-maven-releases</id>
+
+      <username>$nexusUser</username>
+
+      <password>$nexusUserPw</password>
+
+    </server>
+
+    <server>
+
+      <!-- nexus-user  -->
+
+      <id>duke-adms-maven-snapshots</id>
+
+      <username>$nexusUser</username>
+
+      <password>$nexusUserPw</password>
+
+    </server>
+
+  </servers>
+
+
+
+  <!-- mirrors
+
+   | This is a list of mirrors to be used in downloading artifacts from remote repositories.
+
+   |
+
+   | It works like this: a POM may declare a repository to use in resolving certain artifacts.
+
+   | However, this repository may have problems with heavy traffic at times, so people have mirrored
+
+   | it to several places.
+
+   |
+
+   | That repository definition will have a unique id, so we can create a mirror reference for that
+
+   | repository, to be used as an alternate download site. The mirror site will be the preferred
+
+   | server for that repository.
+
+   |-->
+
+  <mirrors>
+
+    <!-- This sends everything else to duke-devops-coe-maven-repositories -->
+
+    <mirror>
+
+      <id>duke-adms-maven-repositories</id>
+
+      <mirrorOf>*</mirrorOf>
+
+      <url>https://$nexusDomain/repository/duke-adms-maven-repositories/</url>
+
+    </mirror>
+
+  </mirrors>
+
+
+
+
+
   <profiles>
+
+
+
     <profile>
-      <id>jboss-public</id>
+
+      <id>nexus</id>
+
+      <!-- artifact repository profile and should be active in every environment -->
+
+      <!-- enable snapshots for the built in central repo to direct all requests to nexus via the mirror -->
+
       <repositories>
+
         <repository>
-          <id>jboss-public-repository</id>
-          <name>JBoss Public Maven Repository Group</name>
-          <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+
+          <id>central</id>
+
+          <url>http://foobar</url>
+
+          <releases>
+
+            <enabled>true</enabled>
+
+            <updatePolicy>daily</updatePolicy>
+
+          </releases>
+
+          <snapshots>
+
+            <enabled>true</enabled>
+
+            <updatePolicy>daily</updatePolicy>
+
+          </snapshots>
+
         </repository>
+
+        <repository>
+
+          <id>duke-adms-maven-repositories</id>
+
+          <url>http://foobar</url>
+
+          <releases>
+
+            <enabled>true</enabled>
+
+            <updatePolicy>interval:60</updatePolicy>
+
+          </releases>
+
+          <snapshots>
+
+            <enabled>true</enabled>
+
+            <updatePolicy>always</updatePolicy>
+
+          </snapshots>
+
+        </repository>
+
       </repositories>
+
+      <pluginRepositories>
+
+        <pluginRepository>
+
+          <id>central</id>
+
+          <url>http://foobar</url>
+
+          <releases>
+
+            <enabled>true</enabled>
+
+          </releases>
+
+          <snapshots>
+
+            <enabled>true</enabled>
+
+          </snapshots>
+
+        </pluginRepository>
+
+      </pluginRepositories>
+
     </profile>
+
+    <profile>
+
+      <id>distribution-management-properties</id>
+
+      <properties>
+
+        <repositoryId>duke-adms-maven-releases</repositoryId>
+
+        <repositoryName>ADMS Maven Releases</repositoryName>
+
+        <repositoryUrl>https://$nexusDomain/repository/duke-adms-maven-releases/</repositoryUrl>
+
+        <snapshotRepositoryId>duke-adms-maven-snapshots</snapshotRepositoryId>
+
+        <snapshotRepositoryName>ADMS Maven Snapshots</snapshotRepositoryName>
+
+        <snapshotRepositoryUrl>https://$nexusDomain/repository/duke-adms-maven-snapshots/</snapshotRepositoryUrl>
+
+      </properties>
+
+    </profile>
+
+    <profile>
+
+      <id>jdk18-profile</id>
+
+      <activation>
+
+        <jdk>1.8</jdk>
+
+      </activation>
+
+      <properties>
+
+        <compileSource>1.8</compileSource>
+
+        <additionalparam>-Xdoclint:none</additionalparam>
+
+        <surefire.argLine>-Xms512m -Xmx1024m</surefire.argLine>
+
+      </properties>
+
+    </profile>
+
+    <profile>
+
+      <id>custom-properties</id>
+
+      <properties>
+
+        <!-- java compiler version and file encoding  -->
+
+        <compileSource>1.8</compileSource>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- subversion url -->
+
+        <scmUrl>https://subversion.duke-energy.com/svn</scmUrl>
+
+      </properties>
+
+    </profile>
+
+    <profile>
+
+      <id>plugin-version-properties</id>
+
+      <!-- build and reporting plugin versions key/value pair -->
+
+      <properties>
+
+        <!-- core plugins -->
+
+        <clean.version>3.1.0</clean.version>
+
+        <compiler.version>3.7.0</compiler.version>
+
+        <deploy.version>2.8.2</deploy.version>
+
+        <install.version>2.5.2</install.version>
+
+        <resources.version>3.1.0</resources.version>
+
+        <site.version>3.6</site.version>
+
+        <surefire.version>2.22.0</surefire.version>
+
+
+
+        <!-- packaging types -->
+
+        <ear.version>2.10.1</ear.version>
+
+        <jar.version>3.1.0</jar.version>
+
+        <war.version>2.6</war.version>
+
+        <source.version>3.0.1</source.version>
+
+
+
+        <!-- reporting -->
+
+        <changelog.version>2.3</changelog.version>
+
+        <changes.version>2.12.1</changes.version>
+
+        <checkstyle.version>2.17</checkstyle.version>
+
+        <javadoc.version>2.10.4</javadoc.version>
+
+        <pmd.version>3.7</pmd.version>
+
+        <project.info.reports.version>2.9</project.info.reports.version>
+
+        <surefire.report.version>2.20</surefire.report.version>
+
+
+
+        <!-- tools -->
+
+        <assembly.version>3.0.0</assembly.version>
+
+        <dependency.version>3.1.1</dependency.version>
+
+        <help.version>3.1.0</help.version>
+
+
+
+        <!-- misc -->
+
+        <jxr.version>2.5</jxr.version>
+
+        <jdepend.version>2.0</jdepend.version>
+
+        <javancss.version>2.1</javancss.version>
+
+        <taglist.version>2.4</taglist.version>
+
+        <findbugs.version>3.0.4</findbugs.version>
+
+        <cobertura.version>2.7</cobertura.version>
+
+        <dashboard.version>1.0.0-beta-1</dashboard.version>
+
+        <exec.version>1.6.0</exec.version>
+
+        <plexusutils.version>3.0.24</plexusutils.version>
+
+        <junit.version>4.12</junit.version>
+
+      </properties>
+
+    </profile>
+
   </profiles>
 
+
+
   <activeProfiles>
-    <activeProfile>jboss-public</activeProfile>
+
+    <activeProfile>nexus</activeProfile>
+
+    <activeProfile>distribution-management-properties</activeProfile>
+
+    <activeProfile>custom-properties</activeProfile>
+
+    <activeProfile>plugin-version-properties</activeProfile>
+
+    <activeProfile>npminstall</activeProfile>
+
   </activeProfiles>
+
+
+
 </settings>

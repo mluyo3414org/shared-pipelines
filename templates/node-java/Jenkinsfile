@@ -7,7 +7,7 @@ library identifier: 'shared-library@master', retriever: modernSCM(
 def nodePodYaml = libraryResource 'agents/k8s/node-pod.yaml'
 def kanikoPodYaml = libraryResource 'agents/k8s/kaniko-pod.yaml'
 def mavenPodYaml = libraryResource 'agents/k8s/maven-pod.yaml'
-def settingsXml = libraryResource """mvnSettings/${applicationName}/settings.xml"""
+def settingsXml = libraryResource """mvnSettings/${mvnSettingsFileDirectory}/settings.xml"""
 
 pipeline {
   agent none
@@ -61,7 +61,6 @@ pipeline {
           yaml kanikoPodYaml
         }
       }
-      //version needs to be replaced
       steps {
         container(name: 'kaniko', shell: '/busybox/sh') {
           withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
@@ -94,8 +93,13 @@ pipeline {
               userRemoteConfigs: [[url: 'https://github.com/buzz-microservices/backend-location.git']]]
 
             container('maven') {
+              withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'pass', usernameVariable: 'user')]) 
+              {
               writeFile file: 'settings.xml', text:"""${settingsXml}"""
               sh 'mvn -s settings.xml dependency:list'
+              echo """${user}"""
+              echo """${pass}"""
+              sleep time: 5, unit: 'MINUTES'
               //checkout scm
               //sh 'mvn -B -DskipTests clean package'
               // stash includes: 'target/*.jar', name: 'location'
@@ -105,6 +109,7 @@ pipeline {
               //   -Dexpression=project.version -q -DforceStdout")
               // }
               // echo "App Version: ${version}"
+              }
             }
           }
         }
