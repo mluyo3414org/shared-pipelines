@@ -96,7 +96,7 @@ pipeline {
               withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'pass', usernameVariable: 'user')]) 
               {
               writeFile file: 'settings.xml', text:"""${settingsXml}"""
-              sh 'mvn -s settings.xml dependency:list'
+              //sh 'mvn -s settings.xml dependency:list'
               echo """${user}"""
               echo """${pass}"""
               sleep time: 5, unit: 'MINUTES'
