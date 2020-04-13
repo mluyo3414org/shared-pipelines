@@ -93,12 +93,12 @@ pipeline {
               userRemoteConfigs: [[url: 'https://github.com/buzz-microservices/backend-location.git']]]
 
             container('maven') {
-              withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'pass', usernameVariable: 'user')]) 
+              withCredentials([usernamePassword(credentialsId: 'nexus', passwordVariable: 'nexusUserPw', usernameVariable: 'nexusUser')]) 
               {
               writeFile file: 'settings.xml', text:"""${settingsXml}"""
               //sh 'mvn -s settings.xml dependency:list'
-              echo """${user}"""
-              echo """${pass}"""
+              echo "${nexusUser}"
+              echo "${nexusUserPw}"
               sleep time: 5, unit: 'MINUTES'
               //checkout scm
               //sh 'mvn -B -DskipTests clean package'
