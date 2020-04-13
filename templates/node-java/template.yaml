@@ -23,6 +23,9 @@ parameters:
   - name: mvnSettingsFileDirectory
     displayName: Folder for settings.xml
     type: string
+  - name: nexusDomain
+    displayName: Nexus Domain
+    type: string
 multibranch:
   branchSource:
     github:
