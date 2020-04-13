@@ -20,8 +20,8 @@ parameters:
   - name: applicationName
     displayName: Application Name
     type: string
-  - name: mvnSettingsFile
-    displayName: File to be used for Maven
+  - name: mvnSettingsFileDirectory
+    displayName: Folder for settings.xml
     type: string
 multibranch:
   branchSource:
