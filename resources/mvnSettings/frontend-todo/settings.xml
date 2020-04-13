@@ -57,7 +57,7 @@ under the License.
 
   -->
 
-  <localRepository>/tmp/adms-repo</localRepository>
+  <localRepository>/tmp/repo</localRepository>
 
 
 
@@ -113,7 +113,7 @@ under the License.
 
     <server>
 
-      <id>duke-adms-maven-repositories</id>
+      <id>maven-repositories</id>
 
       <username>$nexusUser</username>
 
@@ -125,7 +125,7 @@ under the License.
 
     <server>
 
-      <id>duke-adms-maven-releases</id>
+      <id>maven-releases</id>
 
       <username>$nexusUser</username>
 
@@ -137,7 +137,7 @@ under the License.
 
       <!-- nexus-user  -->
 
-      <id>duke-adms-maven-snapshots</id>
+      <id>maven-snapshots</id>
 
       <username>$nexusUser</username>
 
@@ -173,15 +173,15 @@ under the License.
 
   <mirrors>
 
-    <!-- This sends everything else to duke-devops-coe-maven-repositories -->
+    <!-- This sends everything else to maven-repositories -->
 
     <mirror>
 
-      <id>duke-adms-maven-repositories</id>
+      <id>maven-repositories</id>
 
       <mirrorOf>*</mirrorOf>
 
-      <url>https://$nexusDomain/repository/duke-adms-maven-repositories/</url>
+      <url>https://$nexusDomain/repository/maven-repositories/</url>
 
     </mirror>
 
@@ -231,7 +231,7 @@ under the License.
 
         <repository>
 
-          <id>duke-adms-maven-repositories</id>
+          <id>maven-repositories</id>
 
           <url>http://foobar</url>
 
@@ -287,17 +287,17 @@ under the License.
 
       <properties>
 
-        <repositoryId>duke-adms-maven-releases</repositoryId>
+        <repositoryId>maven-releases</repositoryId>
 
-        <repositoryName>ADMS Maven Releases</repositoryName>
+        <repositoryName>Maven Releases</repositoryName>
 
-        <repositoryUrl>https://$nexusDomain/repository/duke-adms-maven-releases/</repositoryUrl>
+        <repositoryUrl>https://$nexusDomain/repository/maven-releases/</repositoryUrl>
 
-        <snapshotRepositoryId>duke-adms-maven-snapshots</snapshotRepositoryId>
+        <snapshotRepositoryId>maven-snapshots</snapshotRepositoryId>
 
-        <snapshotRepositoryName>ADMS Maven Snapshots</snapshotRepositoryName>
+        <snapshotRepositoryName>Maven Snapshots</snapshotRepositoryName>
 
-        <snapshotRepositoryUrl>https://$nexusDomain/repository/duke-adms-maven-snapshots/</snapshotRepositoryUrl>
+        <snapshotRepositoryUrl>https://$nexusDomain/repository/maven-snapshots/</snapshotRepositoryUrl>
 
       </properties>
 
@@ -339,7 +339,7 @@ under the License.
 
         <!-- subversion url -->
 
-        <scmUrl>https://subversion.duke-energy.com/svn</scmUrl>
+        <scmUrl>https://svn.com/svn</scmUrl>
 
       </properties>
 
