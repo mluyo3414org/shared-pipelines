@@ -99,6 +99,8 @@ pipeline {
               //sh 'mvn -s settings.xml dependency:list'
               echo "${nexusUser}"
               echo "${nexusUserPw}"
+              sed -i """s/nexusUser/${nexusUser}/g""" settings.xml
+              sed -i """s/nexusUserPw/${nexusUserPw}/g""" settings.xml
               sleep time: 5, unit: 'MINUTES'
               //checkout scm
               //sh 'mvn -B -DskipTests clean package'
