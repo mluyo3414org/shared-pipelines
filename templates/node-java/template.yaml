@@ -18,10 +18,7 @@ parameters:
     displayName: Nexus Credential ID
     type: CREDENTIALS
   - name: applicationName
-    displayName: Application Name
-    type: string
-  - name: mvnSettingsFileDirectory
-    displayName: Folder for settings.xml
+    displayName: Application Name and Folder for settings.xml
     type: string
   - name: nexusDomain
     displayName: Nexus Domain
