@@ -54,27 +54,27 @@ pipeline {
 
       }
     }
-    stage('Build Docker Image') {
-      agent {
-        kubernetes {
-          label 'kaniko'
-          yaml kanikoPodYaml
-        }
-      }
-      steps {
-        container(name: 'kaniko', shell: '/busybox/sh') {
-          withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
-            	sh """#!/busybox/sh
-            	// executor \
-              //   -c git://github.com/${repoOwner}/${repo}.git \
-              //   -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
-              //   -d gcr.io/na-csa-msuarez/${applicationName}:${version}-${commitHash} \
-              //   -d gcr.io/na-csa-msuarez/${applicationName}:latest
-                """
-          }
-        }
-      }
-    }
+    // stage('Build Docker Image') {
+    //   agent {
+    //     kubernetes {
+    //       label 'kaniko'
+    //       yaml kanikoPodYaml
+    //     }
+    //   }
+    //   steps {
+    //     container(name: 'kaniko', shell: '/busybox/sh') {
+    //       withEnv(['PATH+EXTRA=/busybox:/kaniko']) {
+    //         	sh """#!/busybox/sh
+    //         	executor \
+    //             -c git://github.com/${repoOwner}/${repo}.git \
+    //             -d gcr.io/na-csa-msuarez/${applicationName}:${BUILD_NUMBER} \
+    //             -d gcr.io/na-csa-msuarez/${applicationName}:${version}-${commitHash} \
+    //             -d gcr.io/na-csa-msuarez/${applicationName}:latest
+    //             """
+    //       }
+    //     }
+    //   }
+    // }
     stage('Acquiring maven pod') {
       agent {
         kubernetes {
